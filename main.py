@@ -128,68 +128,6 @@ Use the following strict coding instructions:
 
 Output valid Python code only. Do not include markdown or explanations.
 """
-    
-    
-    # f"""
-    # You are an expert Python developer with knowledge of Windows desktop automation and UI testing.
-
-    # Write a test case to search for a song in the spotify app.
-    # Use the following pixel coordinates for the search box (691,1)–(1304,72)
-
-    # Your task: **output ONE python test file** for the Windows Spotify desktop client,
-    # using ONLY keyboard automation (no UI selectors).
-
-    # STRICT CODING RULES (follow exactly):
-    # 1. Output MUST be valid Python code **only** (no ``` fences, no markdown).
-    # 2. Start with these imports (and add any others you need):
-    #     from pywinauto.application import Application
-    #     import pytest, time
-    # 3. Define constant  
-    #     SPOTIFY_PATH = r"C:\\Users\\palla\\AppData\\Local\\Microsoft\\WindowsApps\\Spotify.exe"
-    # 4. Provide a helper `connect_spotify()` exactly like this (reuse, do not rename):
-
-    #     def connect_spotify():
-    #         try:
-    #             app = Application(backend="uia").connect(title_re="Spotify.*", timeout=10)
-    #             win = app.window(title_re="Spotify.*")
-    #             print(f"[UIA] Window exists: {{win.exists()}} | visible: {{win.is_visible()}}")
-    #             return app
-    #         except Exception as e:
-    #             print(f"[UIA] connect failed: {{e}}")
-    #             try:
-    #                 app = Application(backend="win32").connect(title_re="Spotify.*", timeout=10)
-    #                 win = app.window(title_re="Spotify.*")
-    #                 print(f"[Win32] Window exists: {{win.exists()}} | visible: {{win.is_visible()}}")
-    #                 return app
-    #             except Exception as e2:
-    #                 print(f"[Win32] connect failed: {{e2}}")
-    #                 return Application(backend="uia").start(SPOTIFY_PATH)
-
-    # 5. Provide ONE fixture:
-
-    #     @pytest.fixture(scope="function")
-    #     def spotify_app():
-    #         app = connect_spotify()
-    #         time.sleep(5)
-    #         for win in app.windows():
-    #             try:
-    #                 if win.is_visible() and "Spotify" in win.window_text():
-    #                     print(f"[Fixture] Using window: {{win.window_text()}} | handle: {{win.handle}}")
-    #                     yield win
-    #                     return
-    #             except Exception as e:
-    #                 print(f"[Fixture] Skipping window due to error: {{e}}")
-    #         pytest.fail("No visible Spotify window found!")
-    #         # do NOT close Spotify
-
-    # 6. Write ONE test function per test case that:
-    # • uses the `spotify_app` fixture  
-    # • brings the window to the foreground with `spotify_app.set_focus()`
-
-    # • contains clear `assert` statements with helpful messages (if possible)
-
-    # 7. No `if __name__ == "__main__":` block, no extra commentary.
-    # """
 
     response = requests.post(OLLAMA_URL, json={
         "model": MODEL,
@@ -339,6 +277,7 @@ def push_to_git():
         subprocess.run(["git", "commit", "-m", "Update Spotify test suite"], cwd=repo_path, check=True)
 
         # first push uses -u to create origin/<branch> if it doesn’t exist
+        subprocess.run(["git", "pull", "--rebase", remote, branch], cwd=repo_path, check=True)
         subprocess.run(["git", "push", "-u", remote, branch], cwd=repo_path, check=True)
 
         return (f"<h3>✅ Pushed to <code>{remote_url}</code> "
